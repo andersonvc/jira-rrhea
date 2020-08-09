@@ -27,9 +27,9 @@
 </div>
 <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
   <div class="mdk-drawer-layout__content page-content">
-    <div class="navbar navbar-expand pr-0 navbar-light border-bottom-2" id="default-navbar" data-primary><img src="assets/images/logo.png" width="105" height="30" alt=""/>
+    <div class="navbar navbar-expand pr-0 navbar-light border-bottom-2" id="default-navbar" data-primary> <img src="{{ url_for('static', path=' /images/logo.png') }}/>
       <button class="navbar-toggler w-auto mr-16pt d-block d-lg-none rounded-0" type="button" data-toggle="sidebar"> <span class="material-icons">short_text</span> </button>
-      <a href="mini-index.html" class="navbar-brand mr-16pt d-lg-none"> <span class="avatar avatar-sm navbar-brand-icon mr-0 mr-lg-8pt"> <span class="avatar-title rounded bg-primary"><img src="assets/images/illustration/student/128/white.svg" alt="logo" class="img-fluid" /></span> </span> <span class="d-none d-lg-block">Tarsier</span> </a>
+    
       
       <div class="flex"></div>
       <div class="nav navbar-nav flex-nowrap d-flex mr-16pt">
@@ -112,19 +112,19 @@
   
     
       </div>
-      <script src="assets/vendor/jquery.min.js"></script> 
-      <script src="assets/vendor/popper.min.js"></script> 
-      <script src="assets/vendor/bootstrap.min.js"></script> 
-      <script src="assets/vendor/perfect-scrollbar.min.js"></script> 
-      <script src="assets/vendor/dom-factory.js"></script> 
-      <script src="assets/vendor/material-design-kit.js"></script> 
-      <script src="assets/vendor/fix-footer.js"></script> 
-      <script src="assets/js/app.js"></script> 
-      <script src="assets/vendor/quill.min.js"></script> 
-      <script src="assets/js/quill.js"></script> 
-      <script src="assets/vendor/select2/select2.min.js"></script> 
-      <script src="assets/js/select2.js"></script> 
-      <script src="assets/js/sidebar-mini.js"></script> 
+      <script src="{{ url_for('static', path='/vendor/jquery.min.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/popper.min.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/bootstrap.min.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/perfect-scrollbar.min.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/dom-factory.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/material-design-kit.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/fix-footer.js') }}"></script> 
+      <script src="{{ url_for('static', path='/js/app.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/quill.min.js') }}"></script> 
+      <script src="{{ url_for('static', path='/js/quill.js') }}"></script> 
+      <script src="{{ url_for('static', path='/vendor/select2/select2.min.js') }}"></script> 
+      <script src="{{ url_for('static', path='/js/select2.js') }}"></script> 
+      <script src="{{ url_for('static', path='/js/sidebar-mini.js') }}"></script> 
       <script>
         (function() {
             'use strict';
