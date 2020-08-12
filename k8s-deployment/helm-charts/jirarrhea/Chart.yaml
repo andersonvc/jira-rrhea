@@ -1,0 +1,7 @@
+apiVersion: v2
+name: jirarrhea
+description: Helm chart for deploying jirarrhea webapp and pytorch backend to k8s cluster
+
+type: application
+version: 0.1.0
+appVersion: 1.16.0

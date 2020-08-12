@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "jirarrhea.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jirarrhea.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "jirarrhea.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: app
+          image: "{{ .Values.app.image.registry }}/{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: torchserve
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "jirarrhea.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jirarrhea.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "jirarrhea.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: torchserve
+          image: "localhost:32000/torch:dev2"
+          imagePullPolicy: {{ .Values.torchserve.image.pullPolicy }}
+          volumeMounts:
+            - name: model-data
+              mountPath: /home/model-server/model-store
+          ports:
+            - name: inference
+              containerPort: 8080
+              protocol: TCP
+            - name: management
+              containerPort: 8081
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 4
+              memory: 4Gi
+              nvidia.com/gpu: 1
+            requests:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: model-data
+          persistentVolumeClaim:
+            claimName: model-data-pvc
