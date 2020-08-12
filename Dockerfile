@@ -1,5 +1,7 @@
 FROM python:3.8.5-slim-buster
 
+RUN apt-get update; apt-get install curl vim -y
+
 WORKDIR /app
 
 COPY requirements.txt .
