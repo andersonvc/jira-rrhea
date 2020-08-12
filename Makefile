@@ -24,6 +24,10 @@ run: build
 	docker-compose up
 .PHONY: run
 
+web: 
+	poetry run uvicorn src.backend.main:app --host 0.0.0.0 --reload --port 5555
+.PHONY: web
+
 test: tmp/.tests-passed.sentinel
 .PHONY: test
 
