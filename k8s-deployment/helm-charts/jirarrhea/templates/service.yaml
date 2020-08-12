@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "jirarrhea.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.app.service.type }}
+  ports:
+    - port: {{ .Values.app.service.port }}
+      targetPort: {{ .Values.app.service.port }}
+      nodePort: {{ .Values.app.service.nodePort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "jirarrhea.selectorLabels" . | nindent 4 }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: app-ingress
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: ambassador
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /app
+        backend:
+          serviceName: app
+          servicePort: {{ .Values.app.service.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: torchserve
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "jirarrhea.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.torchserve.service.type }}
+  ports:
+    - port: {{ .Values.torchserve.service.management.port }}
+      targetPort: {{ .Values.torchserve.service.management.port }}
+      protocol: TCP
+      name: management
+    - port: {{ .Values.torchserve.service.inference.port }}
+      targetPort: {{ .Values.torchserve.service.inference.port }}
+      protocol: TCP
+      name: inference
+  selector:
+    {{- include "jirarrhea.selectorLabels" . | nindent 4 }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: torch-ingress
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: ambassador
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /inference
+        backend:
+          serviceName: torchserve
+          servicePort: {{ .Values.torchserve.service.inference.port }}
+      - path: /management
+        backend:
+          serviceName: torchserve
+          servicePort: {{ .Values.torchserve.service.management.port }}
+---
