@@ -7,11 +7,14 @@ MAKEFLAGS += --no-builtin-rules
 
 
 DOCKER_REGISTRY=andersonvc
-IMAGE_NAME=jira-rrhea
-IMAGE_ID="${DOCKER_REGISTRY}/${IMAGE_NAME}:latest"
+BE_IMAGE_NAME=jira-rrhea-be
+BACKEND_IMAGE_ID="${DOCKER_REGISTRY}/${BE_IMAGE_NAME}:latest"
+
+FE_IMAGE_NAME=jira-rrhea-fe
+FRONTEND_IMAGE_ID="${DOCKER_REGISTRY}/${FE_IMAGE_NAME}:latest"
 
 
-build: out/image-id
+build: out/image-id out/fe-image-id
 .PHONY: build
 
 # Clean up the output directories; since all the sentinel files go under tmp, this will cause everything to get rebuilt
@@ -24,9 +27,13 @@ run: build
 	docker-compose up
 .PHONY: run
 
-web: 
+backend: 
 	poetry run uvicorn src.backend.main:app --host 0.0.0.0 --reload --port 5555
-.PHONY: web
+.PHONY: backend
+
+frontend: 
+	cd src/frontend2 && yarn serve
+.PHONY: backend
 
 test: tmp/.tests-passed.sentinel
 .PHONY: test
@@ -34,8 +41,8 @@ test: tmp/.tests-passed.sentinel
 # Docker image - re-built if the webpack output has been rebuilt
 out/image-id: tmp/.tests-passed.sentinel
 	mkdir -p $(@D)
-	docker build --tag="${IMAGE_ID}" .
-	echo "${IMAGE_ID}" > out/image-id
+	docker build --tag="${BACKEND_IMAGE_ID}" .
+	echo "${BACKEND_IMAGE_ID}" > out/image-id
 
 
 # Tests - re-ran if any file under src has been changed since tmp/.tests-passed.sentinel was last touched
@@ -53,3 +60,11 @@ tmp/.packed.sentinel: tmp/.tests-passed.sentinel
 	mkdir -p $(@D)
 	poetry build
 	touch $@
+
+
+# Docker image - re-built if the webpack output has been rebuilt
+out/fe-image-id: $(shell find src/frontend -type f)
+	mkdir -p $(@D)
+	docker build --tag="${FRONTEND_IMAGE_ID}" ./src/frontend2
+	echo "${FRONTEND_IMAGE_ID}" > out/fe-image-id
+ 
