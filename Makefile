@@ -32,8 +32,8 @@ backend:
 .PHONY: backend
 
 frontend: 
-	cd src/frontend2 && yarn serve
-.PHONY: backend
+	cd src/vue-frontend && yarn serve
+.PHONY: frontend
 
 test: tmp/.tests-passed.sentinel
 .PHONY: test
@@ -65,6 +65,6 @@ tmp/.packed.sentinel: tmp/.tests-passed.sentinel
 # Docker image - re-built if the webpack output has been rebuilt
 out/fe-image-id: $(shell find src/frontend -type f)
 	mkdir -p $(@D)
-	docker build --tag="${FRONTEND_IMAGE_ID}" ./src/frontend2
+	docker build --tag="${FRONTEND_IMAGE_ID}" ./src/vue-frontend
 	echo "${FRONTEND_IMAGE_ID}" > out/fe-image-id
  

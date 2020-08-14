@@ -1,9 +1,8 @@
 .vscode/
-
 out/
-
 tmp/
-
+src/vue-frontend/node-modules
+*/src/vue-frontend/node-modules/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
