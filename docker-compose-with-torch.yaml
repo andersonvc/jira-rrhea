@@ -1,15 +1,15 @@
 version: '3'
 services:
   backend:
-    image: andersonvc/jira-rrhea-be:latest
+    image: andersonvc/jirarrhea-backend:latest
     networks:
       servenet:
         aliases:
           - backend
     ports:
-      - "5555:80"
+      - "3001:80"
   frontend:
-    image: andersonvc/jira-rrhea-fe:latest
+    image: andersonvc/jirarrhea-frontend:latest
     ports:
       - "3000:80"
     networks:
@@ -21,8 +21,8 @@ services:
     volumes:
       - /model-server:/home/model-server
     ports:
-      - "3000:8080"
-      - "3001:8081"
+      - "3002:8080"
+      - "3003:8081"
     networks:
       servenet:
         aliases:

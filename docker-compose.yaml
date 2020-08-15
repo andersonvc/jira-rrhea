@@ -1,10 +1,10 @@
 version: '3'
 services:
   backend:
-    image: andersonvc/jira-rrhea-be:latest
+    image: andersonvc/jirarrhea-backend:latest
     ports:
-      - "5555:80"
+      - "3001:80"
   frontend:
-    image: andersonvc/jira-rrhea-fe:latest
+    image: andersonvc/jirarrhea-frontend:latest
     ports:
       - "3000:8080"
