@@ -1,7 +1,7 @@
 .vscode/
 out/
 tmp/
-backend/poetry.lock
+deployments/artifacts/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
