@@ -17,6 +17,8 @@ build: deployments/artifacts/backend-image-id deployments/artifacts/frontend-ima
 clean:
 	rm -rf tmp
 	rm -rf out
+	rm -rf deployments/artifacts/*.sentinel
+	rm -rf deployments/artifacts/.backend-tests-passed.sentinel
 .PHONY: clean
 
 run: build
@@ -35,8 +37,9 @@ test: tmp/.tests-passed.sentinel
 .PHONY: test
 
 init:
-	cd frontend
-	npm install .
+	sudo npm install -g ./frontend
+	cd backend 
+	pyenv local 3.8.5
 	cd ..
 
 # Tests - re-ran if any file under src has been changed since tmp/.tests-passed.sentinel was last touched
