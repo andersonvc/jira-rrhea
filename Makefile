@@ -15,10 +15,8 @@ build: deployments/artifacts/backend-image-id deployments/artifacts/frontend-ima
 
 # Clean up the output directories; since all the sentinel files go under tmp, this will cause everything to get rebuilt
 clean:
-	rm -rf tmp
-	rm -rf out
-	rm -rf deployments/artifacts/*.sentinel
-	rm -rf deployments/artifacts/.backend-tests-passed.sentinel
+	rm -rf deployments/artifacts
+	mkdir deployments/artifacts
 .PHONY: clean
 
 run: build
@@ -30,14 +28,18 @@ backend:
 .PHONY: backend
 
 frontend: 
-	cd src/vue-frontend && yarn serve
+	cd frontend 
+	yarn serve
 .PHONY: frontend
 
 test: tmp/.tests-passed.sentinel
 .PHONY: test
 
 init:
-	sudo npm install -g ./frontend
+	cd frontend
+	sudo yarn add @vue/cli-service
+	sudo npm install .
+	cd ..
 	cd backend 
 	pyenv local 3.8.5
 	cd ..
