@@ -1,0 +1,33 @@
+version: '3'
+services:
+  backend:
+    image: andersonvc/jirarrhea-backend:latest
+    networks:
+      servenet:
+        aliases:
+          - backend
+    ports:
+      - "3001:80"
+  frontend:
+    image: andersonvc/jirarrhea-frontend:latest
+    ports:
+      - "3000:80"
+    networks:
+      servenet:
+        aliases:
+          - frontend
+  torch:
+    image: pytorch/torchserve:latest-gpu
+    volumes:
+      - /model-server:/home/model-server
+    ports:
+      - "3002:8080"
+      - "3003:8081"
+    networks:
+      servenet:
+        aliases:
+          - torch
+networks:
+  servenet:
+    external:
+      name: servenet

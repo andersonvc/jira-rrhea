@@ -1,0 +1,41 @@
+# Default values for jirarrhea.
+
+name: jirrarhea-app
+namespace: jirarrhea
+
+app:
+  image:
+    registry: localhost:32000
+    repository: jira-rrhea
+    tag: latest
+    pullPolicy: Always
+  replicaCount: 1
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30080
+torchserve:
+  image:
+    registry: localhost:32000
+    repository: torchserve
+    tag: latest-gpu
+    pullPolicy: Always
+  replicaCount: 1
+  service:
+    management:
+      type: NodePort
+      port: 8081
+      nodePort: 31081
+    inference:
+      type: NodePort
+      port: 8080
+      nodePort: 31080
+
+
+imagePullSecrets: []
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 80
+  nodePort: 30080
