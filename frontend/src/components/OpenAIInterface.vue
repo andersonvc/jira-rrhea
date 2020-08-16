@@ -1,55 +1,41 @@
 <template>
-<el-row>
+  <div id="content">
+    <el-row>
+      <el-col :span="6">
+        <img alt="sidebar" src="../assets/jira-sidebar.png" style="max-width:100%;" align="top" />
+      </el-col>
+
+      <el-col :span="18">
+        <div style="margin: 38px;"></div>
+
+        <el-form :label-position="Top" label-width="100px" :model="formLabelAlign">
+          <el-form-item label="Jira Title">
+            <el-input v-model="formLabelAlign.title"></el-input>
+          </el-form-item>
+
+          <el-form-item label="Description">
+            <el-input
+              type="textarea"
+              v-model="formLabelAlign.Description"
+              :autosize="{ minRows: 25, maxRows: 10}"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+
+        <div style="margin: 10px;"></div>
+
+        <el-button
+          type="primary"
+          square
+          icon="el-icon-lollipop"
+          size="small"
+        >BS for me</el-button>
 
 
-    <el-col :span="12">
-        
-        <el-card class="box-card">
-
-            <div slot="header" class="clearfix">
-                <span>Jira Input</span>
-            </div>
-
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-row>
-                    <el-form-item label="Jira Title">
-                        <el-input v-model="form.title"></el-input>
-                    </el-form-item>
-                </el-row>
-                
-                <el-row>
-                    <el-form-item label="Jira Flavor">
-                        <el-select v-model="form.region" placeholder="please select your Jira flavor">
-                        <el-option label="Business Formal" value="business"></el-option>
-                        <el-option label="Passive Agressive" value="passive-agressive"></el-option>
-                        <el-option label="Too Creative" value="creative"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-row>
-
-
-                <el-row>
-                    <el-button type="primary" icon="el-icon-magic-stick">Generate Jira Description</el-button>
-                </el-row>
-            </el-form>
-        </el-card>
-        
-    </el-col>
-
-    <el-col :span="12">
-        <el-row>
-            <h4>Result</h4>
-        </el-row>
-
-    </el-col>
-
-</el-row>
-
-
-
+      </el-col>
+    </el-row>
+  </div>
 </template>
-
-
 
 
 
@@ -63,29 +49,19 @@ export default {
 </script>
 
 
-// stuff that's needed to make the form appear
+// stuff that's needed to make the input appear i think?
 <script>
-  export default {
-    data() {
-      return {
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
-      }
-    },
-    methods: {
-      onSubmit() {
-        console.log('submit!');
-      }
-    }
-  }
+export default {
+  data() {
+    return {
+      formLabelAlign: {
+        title: "",
+        Description: "",
+        type: "",
+      },
+    };
+  },
+};
 </script>
 
 
