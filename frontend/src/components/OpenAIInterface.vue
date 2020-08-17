@@ -49,6 +49,7 @@ export default {
       blah:"OpenAI generated Jira ticket description. Update Jira ticket title to start.",
       word_count:0,
       temperature:0.94,
+      is_processing:false,
       title:"Add back button to search nav.",
       formLabelAlign: {
         title: "",
@@ -60,6 +61,9 @@ export default {
     methods: {
 
         async submit(){
+          if (this.is_processing==true){
+            return
+          }
 
             let config = {
                 headers: {
@@ -74,12 +78,16 @@ export default {
             formData.set('hist', 'DUMMY');
             formData.set('temp', '0.93');
 
+            this.is_processing = true;
+
             await this.axios
             .post('http://llamaland.local:3001/v1/nlp/gpt3/completions/', formData, config)
             .then(resp => {
                 this.blah = resp.data.response;
+                this.is_processing = false;
             })
             .catch(error => {
+                this.is_processing = false;
                 console.log(error.response.data)
             });
         }

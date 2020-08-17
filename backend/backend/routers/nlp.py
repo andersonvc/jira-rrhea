@@ -53,7 +53,7 @@ async def gpt3_completions(statement:str = Form(...),hist:str=Form(...),temp:str
     input_context=f"{hist}\nTASK_TITLE: {statement}\nTASK_SUMMARY: "
 
     try:
-        response = openai.Completion.create(engine='davinci-v2b',max_tokens=600,temperature=temp,prompt=input_context,stop=['TASK_TITLE'])
+        response = openai.Completion.create(engine='davinci-v2b',max_tokens=800,temperature=temp,prompt=input_context,stop=['TASK_TITLE'])
         formatted_response = response['choices'][0]['text'].strip().replace('\xa0',' ')
         latest_resp = formatted_response.split('TASK_SUMMARY: ')[-1][:-1]
 
