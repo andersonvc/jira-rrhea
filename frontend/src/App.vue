@@ -12,10 +12,10 @@
 import Navbar from './components/Navbar.vue'
 import OpenAIInterface from './components/OpenAIInterface.vue'
 
-
 export default {
   name: 'App',
-  components: { OpenAIInterface, Navbar }
+  components: { OpenAIInterface, Navbar },
+  computed:{ load(){ return this.$store.getters.isLoading }, }
 }
 </script>
 
