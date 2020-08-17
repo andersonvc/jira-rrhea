@@ -3,7 +3,10 @@ from dotenv import load_dotenv
 import logging
 import os
 
-load_dotenv(dotenv_path=f'{os.getenv("HOME")}/.openapi/.env')
+
+if "OPENAI_API_SECRET" not in os.environ:
+    load_dotenv(dotenv_path=f'{os.getenv("HOME")}/.openapi/.env')
+
 
 class Settings(BaseSettings):
     serving_management_url:str = "http://torch:3002"

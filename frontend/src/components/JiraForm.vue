@@ -57,7 +57,7 @@ export default {
 
             let config = {
                 headers: {
-                "X-CSRFToken": this.csrfToken,
+                //"X-CSRFToken": this.csrfToken,
                 "Content-Type": 'application/x-www-form-urlencoded',
                 }
             }

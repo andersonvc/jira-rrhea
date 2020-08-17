@@ -15,10 +15,10 @@ app.include_router(info.router, prefix="/v1/info", tags=['info'])
 
 
 
-origins = ["http://localhost", "http://localhost:8080", "http://localhost:8081", "http://localhost:3000"]
+#origins = ["http://localhost", "http://localhost:8080", "http://localhost:8081", "http://localhost:3000", "http://0.0.0.0:3000"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],#origins,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
@@ -27,7 +27,7 @@ app.add_middleware(
 
 @app.get("/test")
 def test():
-    return {'msg':'Hello World'}
+    return {'msg':'test'}
 
 
 
