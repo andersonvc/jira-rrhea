@@ -34,19 +34,32 @@ async def dummy_completions(prompt:str = Form(...),word_count:int=Form(...),temp
     return {"text": resp["text_out"][3:-6]}
 
 
-@router.post("/gpt3/completions")
-async def gpt3_completions(prompt:str = Form(...),word_count:int=Form(...),temperature:float=Form(...),stream_result:bool=False):
-    if stream_result:
-        raise HTTPException(status_code=503, detail='streaming completion not yet implemented')
-    
-    preamble = "I am a software engineer and I am writing a description of a new feature I want to implement for a web application. I am designing this feature in Angular JS and I have deep understanding of all facets of web development. I am writing a Jira ticket that outlines software activites around user authentication with an OAuth plugin."
-    default_text = " "
-    text_input = preamble + prompt if prompt else default_text
 
-    resp = openai.Completion.create(engine="davinci", prompt=text_input, max_tokens=word_count,temperature=temperature)
+
+
+@router.post("/gpt3/completions")
+async def gpt3_completions(statement:str = Form(...),hist:str=Form(...),temp:str=Form(...)):
+
+    temp = float(temp)
+
+    if not hist or hist == "" or hist == "DUMMY":
+        hist="CONTEXT: A frontend web developer wants to create an extremely detailed task description from a task summary."
+        starter_statement='Add a login form to the navbar.'
+        starter_response="As an O'Reilly user, I need to be able to log into my O'Reilly account from the navbar. The login form needs to be accessible from all pages on the website. Additionally, the login form should get correctly displayed on all modern web browsers. The login form consists of a username entry field, a password entry field and a submit button. If the user fails to log into their account an unauthorized user error alert message should be displayed. All other types of HTTP errors should get logged to our backend. The login should also include a button for the user to reset their password via email."
+        starter_statement1="Create a Navbar for the webapp."
+        starter_response1="As an O'Reilly user, I need to be able to navigate the O'Reilly website using a navbar. The navbar needs to be accessible from all pages on the website. Additionally it needs to be supported on all modern web browsers. The navbar consists of a logo, a search entry field, links to the contact, about and profile pages, links to the site's social media accounts and a toggle for the menu. If the user is authenticated, the navbar should also include their account details and history."
+        hist = f"{hist}\nTASK_TITLE: {starter_statement}\nTASK_SUMMARY: {starter_response}\nTASK_TITLE: {starter_statement1}\nTASK_SUMMARY: {starter_response1}"
+
+    input_context=f"{hist}\nTASK_TITLE: {statement}\nTASK_SUMMARY: "
+
     try:
-        output = resp['choices'][0]['text']
-        return {'text':output}
+        response = openai.Completion.create(engine='davinci-v2b',max_tokens=600,temperature=temp,prompt=input_context,stop=['TASK_TITLE'])
+        formatted_response = response['choices'][0]['text'].strip().replace('\xa0',' ')
+        latest_resp = formatted_response.split('TASK_SUMMARY: ')[-1][:-1]
+
+        updated_hist = f"{hist}\nTASK_TITLE: {statement}\nTASK_SUMMARY: {formatted_response}"
+
+        return { 'response':latest_resp, 'hist':updated_hist }
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=500, detail='OpenAI backend query failed')

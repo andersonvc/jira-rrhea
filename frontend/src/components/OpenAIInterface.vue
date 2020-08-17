@@ -10,13 +10,13 @@
 
         <el-form :label-position="Top" label-width="100px" :model="formLabelAlign">
           <el-form-item label="Jira Title">
-            <el-input v-model="formLabelAlign.title"></el-input>
+            <el-input v-model=title></el-input>
           </el-form-item>
 
           <el-form-item label="Description">
             <el-input
               type="textarea"
-              v-model="formLabelAlign.Description"
+              v-model=blah
               :autosize="{ minRows: 25, maxRows: 10}"
             ></el-input>
           </el-form-item>
@@ -29,38 +29,61 @@
           square
           icon="el-icon-lollipop"
           size="small"
+          @click="submit"
         >BS for me</el-button>
 
 
       </el-col>
     </el-row>
   </div>
+
 </template>
-
-
-
-
-<script>
-export default {
-  name: "OpenAIInterface",
-  data: () => {},
-  methods: {},
-};
-</script>
 
 
 // stuff that's needed to make the input appear i think?
 <script>
 export default {
-  data() {
-    return {
+  name: 'OpenAIInterface',
+  data: () => (
+    {
+      blah:"OpenAI generated Jira ticket description. Update Jira ticket title to start.",
+      word_count:0,
+      temperature:0.94,
+      title:"Add back button to search nav.",
       formLabelAlign: {
         title: "",
         Description: "",
         type: "",
       },
-    };
-  },
+    }),
+
+    methods: {
+
+        async submit(){
+
+            let config = {
+                headers: {
+                //"X-CSRFToken": this.csrfToken,
+                "Content-Type": 'application/x-www-form-urlencoded',
+                }
+            }
+
+            this.blah = "";
+            let formData = new FormData();
+            formData.set('statement', this.title);
+            formData.set('hist', 'DUMMY');
+            formData.set('temp', '0.93');
+
+            await this.axios
+            .post('http://llamaland.local:3001/v1/nlp/gpt3/completions/', formData, config)
+            .then(resp => {
+                this.blah = resp.data.response;
+            })
+            .catch(error => {
+                console.log(error.response.data)
+            });
+        }
+    }
 };
 </script>
 
